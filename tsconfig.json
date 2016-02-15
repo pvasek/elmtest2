@@ -1,0 +1,33 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "allowJs": true,
+        "target": "es5",
+        "outDir": "dist/ts",
+        "jsx": "react",
+        "rootDir": ".",
+        "sourceMap": true,
+        "inlineSourceMap": false
+    },
+    
+    "files": [
+        "typings/tsd.d.ts",
+        "./node_modules/immutable/dist/immutable.d.ts",
+        
+        "src/types.ts",
+        "src/action.ts",        
+        "src/forwardAction.ts",
+        "src/startApp.ts",
+        "src/middleware/actionLogMiddleware.ts",
+        "src/middleware/actionWorkflowMiddleware.ts",
+        "src/drivers/htmlDriver.ts",
+        
+        "src/__tests__/action.ts",
+        "src/__tests__/forwardAction.ts",
+        
+        "examples/counters/Counter.tsx",
+        "examples/counters/CounterPair.tsx",
+        "examples/counters/CounterList.tsx",
+        "examples/counters/index.tsx"
+    ]
+}
