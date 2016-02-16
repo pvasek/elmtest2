@@ -76,6 +76,5 @@ export const effects = {
         {
             url: 'url'
         }
-    ] : [],
-    focus: effectsCounter.focus
+    ] : []
 }

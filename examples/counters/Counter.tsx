@@ -8,7 +8,6 @@ const DECREMENT = 'DECREMENT';
 const SET = 'SET';
 
 const VALUE_KEY = 'value';
-const FOCUS_KEY = 'focus';
 
 export const init = () => (Immutable.Map({value: 0}));
 
@@ -40,10 +39,12 @@ export class View extends Component<IViewProperties,{}> {
 
     increment() {
         this.props.dispatch({type: INCREMENT});
+        (this.refs as any).input.focus();
     };
     
     decrement() {
         this.props.dispatch({type: DECREMENT});
+        (this.refs as any).input.focus();
     };
 
     set(e: any) {
@@ -54,7 +55,7 @@ export class View extends Component<IViewProperties,{}> {
         const counterStyle = {display: 'inline-block', padding: '2 20'};
         return (
             <div style={counterStyle}>
-                <input type="text" onChange={this.set} value={this.props.model.get(VALUE_KEY)}/>
+                <input ref="input" type="text" onChange={this.set} value={this.props.model.get(VALUE_KEY)}/>
                 {/*<span>{props.model.value}</span>*/}                
                 <button onClick={this.increment}>+</button>
                 <button onClick={this.decrement}>-</button>
@@ -64,6 +65,5 @@ export class View extends Component<IViewProperties,{}> {
 };
 
 export const effects = {
-    html: View,
-    focus: (state, dispatch) => state.get('FOCUS_KEY') ? {} : null
+    html: View
 }

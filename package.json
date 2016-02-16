@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "classnames": "^2.2.3",
     "flyd": "^0.2.1",
     "immutable": "^3.7.6",
     "react": "^0.14.7",

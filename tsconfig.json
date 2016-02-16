@@ -18,6 +18,7 @@
         "src/action.ts",        
         "src/forwardAction.ts",
         "src/startApp.ts",
+        "src/utils.ts",
         "src/middleware/actionLogMiddleware.ts",
         "src/middleware/actionWorkflowMiddleware.ts",
         "src/drivers/htmlDriver.ts",
@@ -28,6 +29,18 @@
         "examples/counters/Counter.tsx",
         "examples/counters/CounterPair.tsx",
         "examples/counters/CounterList.tsx",
-        "examples/counters/index.tsx"
+        "examples/counters/index.tsx",
+        
+        "examples/app/index.tsx",
+        "examples/app/List.tsx",
+        "examples/app/components/ActionBar.tsx",
+        "examples/app/components/ActionButton.tsx",
+        "examples/app/components/FilterBar.tsx",
+        "examples/app/components/BulkToolbar.tsx",
+        "examples/app/components/Pager.tsx",
+        "examples/app/components/Table.tsx",
+        "examples/app/reactComponents/Filters/TextMatchFilter.tsx",
+        "examples/app/reactComponents/tables/Table.tsx",
+        "examples/app/reactComponents/tables/DataColumn.tsx"
     ]
 }
