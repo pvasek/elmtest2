@@ -32,10 +32,8 @@ export class FilterBar extends Component<any, {}> {
     render() {
         const model = this.props.model.toJS();
         return (
-            <div className="filterbar">
-                <div className="fitlerbar-items">
-                    {renderChildren(this.props.children, { model, onFilterChange: this.onFilterChange })}
-                </div>
+            <div className="filterbar-component">
+                {renderChildren(this.props.children, { model, onFilterChange: this.onFilterChange })}
             </div>
         );
     }

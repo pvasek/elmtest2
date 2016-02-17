@@ -8,8 +8,8 @@ export class ActionBar extends Component<any, {}> {
     
     render() {
         return (
-            <div className="toolbar">
-                <div className="toolbar-items">
+            <div className="actionbar-component">
+                <div className="actionbar-component-items">
                     {renderChildren(this.props.children, { dispatch: this.props.dispatch})}
                 </div>
             </div>

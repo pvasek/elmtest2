@@ -1,0 +1,49 @@
+.table-list {
+
+	th {
+		margin-right: 12px;
+		cursor: pointer;
+	}
+
+	.col-selection {
+		width: 10px;
+		border-left: 5px solid transparent;
+        padding: 4px;
+        input[type=checkbox] {
+            height: 18px;
+            width: 18px;
+        }
+	}
+
+	.row-selected .col-selection {
+		border-left: 5px solid #ffea66;
+	}
+
+	th.col-sortby::after {
+		margin-left: -12px;
+		width: 0;
+		height: 0;
+		border-left: 5px solid transparent;
+		border-right: 5px solid transparent;
+		border-bottom: 5px solid #444;
+		border-top: none;
+		content: "";
+		right: 0;
+		float: right;
+		margin-top: 8px;
+	}
+
+	th.col-sortby.col-sortby-desc::after {
+		margin-left: -12px;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+		border-top: 5px solid #444;
+    border-bottom: none;
+		content: "";
+    right: 0;
+    float: right;
+    margin-bottom: 7px;
+	}
+}

@@ -1,0 +1,31 @@
+.pager-component {
+  text-align: right;
+
+  select {
+    padding: 3px 0;
+    margin: 5px 2px;
+    float: right;
+    border-radius: 3px;
+  }
+
+  .pagination {
+    display: inline-block;
+  }
+  .pagination li {
+    display: inline;
+  }
+
+  .pager-component-pagination.pagination {
+    margin: 4px 0;
+
+    & > li > a,
+    & > li > span {
+      padding: 3px 12px;
+    }
+
+    .pagination-info {
+      min-width: 117px;
+      text-align: center;
+    }
+  }
+}

@@ -3,10 +3,11 @@ import { Component } from 'react';
 import * as Immutable from 'immutable';
 import { IAction, IViewProperties } from './../../src/types';
 import { forwardAction} from './../../src/forwardAction';
+import { forwardUpdates } from './../../src/forwardUpdates';
 
 import { ActionBar } from './components/ActionBar';
 import { ActionButton } from './components/ActionButton';
-import { BulkToolbar } from './components/BulkToolbar';
+import { BulkActionBar } from './components/BulkActionBar';
 import { TextMatchFilter } from './reactComponents/filters/TextMatchFilter';
 import { FilterBar, update as filterUpdate, init as filterInit } from './components/FilterBar';
 import { View as Pager, update as pagerUpdate, init as pagerInit } from './components/Pager';
@@ -14,29 +15,37 @@ import { View as Table, update as tableUpdate, init as tableInit } from './compo
 import { DataColumn } from './reactComponents/tables/DataColumn';
 
 
-const NEW_ITEM = 'NEW_ITEM';
-const PAGER = 'PAGER';
-const FILTER = 'FILTER';
-const TABLE = 'TABLE';
+const actions = {
+    NEW_ITEM: 'NEW_ITEM',
+    DELETE: 'DELETE'
+}
+
+const keys = {
+    PAGER: 'pager',
+    FILTER: 'filter',
+    TABLE: 'table'
+}
 
 export const init = () => Immutable.Map({
-    [PAGER]: pagerInit(),
-    [FILTER]: filterInit(),
-    [TABLE]: tableInit()
+    [keys.PAGER]: pagerInit(),
+    [keys.FILTER]: filterInit(),
+    [keys.TABLE]: tableInit()
 });
 
 export const update = (state: Immutable.Map<any, any> = init(), action: IAction): any => {
-    if (action.type === PAGER) {
-        return state.set(PAGER, pagerUpdate(state.get(PAGER), action.forwardedAction));
-    }
-    if (action.type === FILTER) {
-        return state.set(FILTER, filterUpdate(state.get(FILTER), action.forwardedAction));
-    }
-    if (action.type === TABLE) {
-        return state.set(TABLE, tableUpdate(state.get(TABLE), action.forwardedAction));
-    }
-    return state;
-}
+    return forwardUpdates({
+        [keys.PAGER]: pagerUpdate,
+        [keys.FILTER]: filterUpdate,
+        [keys.TABLE]: tableUpdate
+    }, state, action);
+};
+
+export const compProps = (key: string, props: IViewProperties) => {
+    return {
+        model: props.model.get(key),
+        dispatch: forwardAction(props.dispatch, key)
+    };
+};
 
 export class View extends Component<IViewProperties, {}> {
     private data = [
@@ -48,22 +57,23 @@ export class View extends Component<IViewProperties, {}> {
     ];
     
     render() {
-        const arg = {};
         return (
             <div>
                 <ActionBar dispatch={this.props.dispatch}>
-                    <ActionButton title="New" type={NEW_ITEM}/>
+                    <ActionButton title="New" type={actions.NEW_ITEM}/>
                 </ActionBar>
                 
-                <FilterBar model={this.props.model.get(FILTER)} dispatch={forwardAction(this.props.dispatch, FILTER)} >
+                <FilterBar {...compProps(keys.FILTER, this.props)} >
                     <TextMatchFilter property="Name"/>
                 </FilterBar>
                 
-                <Pager model={this.props.model.get(PAGER)} dispatch={forwardAction(this.props.dispatch, PAGER)} />
+                <Pager {...compProps(keys.PAGER, this.props)} />
                 
-                <BulkToolbar dispatch={this.props.dispatch}>Bulk toolbar</BulkToolbar>
+                <BulkActionBar model={this.props.model.get(keys.TABLE).get('selectedIds')} dispatch={this.props.dispatch}>
+                    <ActionButton title="Delete" type={actions.DELETE}/>
+                </BulkActionBar>
                 
-                <Table data={this.data} model={this.props.model.get(TABLE)} dispatch={forwardAction(this.props.dispatch, TABLE)}>
+                <Table data={this.data}  {...compProps(keys.TABLE, this.props)} >
                     <DataColumn title="First Name" field="FirstName"/>
                     <DataColumn title="Last Name" field="LastName"/>                
                 </Table>
