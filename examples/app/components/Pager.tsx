@@ -12,9 +12,26 @@ export const GO_TO_NEXT_PAGE = 'GO_TO_NEXT_PAGE';
 export const GO_TO_PREVIOUS_PAGE = 'GO_TO_PREVIOUS_PAGE';
 export const CHANGE_PAGE_SIZE = 'CHANGE_PAGE_SIZE';
 
-export const init = () => Immutable.Map({skip: 0, take: 20, count: 100})
+type Model = Immutable.Map<any, any>;
 
-export const update = (state: Immutable.Map<any, any> = init(), action = null) => {
+export interface IPagingOptions {
+    skip: number,
+    take: number    
+};
+
+export const data = {    
+    getPagingOptions(state: Model): IPagingOptions {
+        const stateJs = state.toJS();
+        return { 
+            skip: stateJs.skip,
+            take: stateJs.take 
+        };
+    }
+};
+
+export const init = (): Model => Immutable.Map({skip: 0, take: 20, count: 100})
+
+export const update = (state: Model = init(), action = null) => {
 	switch(action.type) {
 		case CHANGE_PAGE_SIZE:
             return state.merge({ take: action.payload, skip: 0 });

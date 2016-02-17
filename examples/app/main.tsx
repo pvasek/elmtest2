@@ -9,6 +9,7 @@ import { actionWorkflowMiddleware } from './../../src/middleware/actionWorkflowM
 import { actionLogMiddleware } from './../../src/middleware/actionLogMiddleware';
 import { startApp } from './../../src/startApp';
 import { htmlDriver } from './../../src/drivers/htmlDriver';
+import { httpDriver } from './../../src/drivers/httpDriver';
 import { update, init, effects } from './List'; 
 
 
@@ -18,4 +19,4 @@ const middlewares = applyMiddleware(
     
 const createStoreWithMiddleware = compose(middlewares)(createStore);
 
-startApp({update, init, effects }, createStoreWithMiddleware, [htmlDriver]);
+startApp({update, init, effects }, createStoreWithMiddleware, [htmlDriver, httpDriver]);

@@ -10,39 +10,13 @@
         "inlineSourceMap": false
     },
     
-    "files": [
-        "typings/tsd.d.ts",
-        "./node_modules/immutable/dist/immutable.d.ts",
+    "exclude": [
+        "gulpfile.js",
+        ".vscode",
+        "node_modules",
         
-        "src/types.ts",
-        "src/action.ts",        
-        "src/forwardAction.ts",
-        "src/forwardUpdates.ts",
-        "src/startApp.ts",
-        "src/utils.ts",
-        "src/middleware/actionLogMiddleware.ts",
-        "src/middleware/actionWorkflowMiddleware.ts",
-        "src/drivers/htmlDriver.ts",
-        
-        "src/__tests__/action.ts",
-        "src/__tests__/forwardAction.ts",
-        
-        "examples/counters/Counter.tsx",
-        "examples/counters/CounterPair.tsx",
-        "examples/counters/CounterList.tsx",
-        "examples/counters/index.tsx",
-        
-        "examples/app/main.tsx",
-        "examples/app/List.tsx",
-        "examples/app/components/resources.ts",
-        "examples/app/components/ActionBar.tsx",
-        "examples/app/components/ActionButton.tsx",
-        "examples/app/components/FilterBar.tsx",
-        "examples/app/components/BulkActionBar.tsx",
-        "examples/app/components/Pager.tsx",
-        "examples/app/components/Table.tsx",
-        "examples/app/reactComponents/Filters/TextMatchFilter.tsx",
-        "examples/app/reactComponents/tables/Table.tsx",
-        "examples/app/reactComponents/tables/DataColumn.tsx"
+        "dist",        
+        "examples/app/dist",
+        "examples/counters/dist"
     ]
 }
