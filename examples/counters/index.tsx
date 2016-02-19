@@ -9,7 +9,7 @@ import { actionWorkflowMiddleware } from './../../src/middleware/actionWorkflowM
 import { actionLogMiddleware } from './../../src/middleware/actionLogMiddleware';
 import { startApp } from './../../src/startApp';
 import { htmlDriver } from './../../src/drivers/htmlDriver';
-import { update, init, effects } from './CounterList'; 
+import { View, ModelGenerated } from './Counter'; 
 
 const updateHandler = (dispatch, actionInfo, getState) => {
     console.log('SET called', actionInfo);
@@ -31,4 +31,15 @@ const middlewares = applyMiddleware(
     
 const createStoreWithMiddleware = compose(middlewares)(createStore);
 
-startApp({update, init, effects }, createStoreWithMiddleware, [htmlDriver]);
+const appElement = document.getElementById('app');
+
+const render = () => {
+    ReactDOM.render(React.createElement(View), appElement)
+};
+
+ModelGenerated.onChange = () => {
+    render();
+}
+
+render();
+

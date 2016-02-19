@@ -21,6 +21,11 @@ gulp.task('ts', ['clean'], function() {
         .pipe(gulp.dest('./dist/ts'));
 });
 
+gulp.task('test:watch', ['test'], function() {
+    gulp.watch(['**/*.ts'], ['test']);
+});
+
+
 gulp.task('test', ['ts'], shell.task([
   'tape ./dist/ts/**/__tests__/* | faucet',
 ]));

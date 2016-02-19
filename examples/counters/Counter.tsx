@@ -3,62 +3,58 @@ import { Component } from 'react';
 import * as Immutable from 'immutable';
 import { IAction, IViewProperties } from './../../src/types';
 
-const INCREMENT = 'INCREMENT';
-const DECREMENT = 'DECREMENT';
-const SET = 'SET';
 
-const VALUE_KEY = 'value';
-
-export const init = () => (Immutable.Map({value: 0}));
-
-export const update = (state: Immutable.Map<any, any> = init(), action: IAction): any => {
-    switch (action.type) {        
-        case INCREMENT:
-            return  state.set(VALUE_KEY, state.get(VALUE_KEY) + 1 );
-        case DECREMENT:
-            return  state.set(VALUE_KEY, state.get(VALUE_KEY) - 1 );
-        case SET: 
-            return  state.set(VALUE_KEY, parseInt(action.payload, 10));
+const Model = {
+    state: {
+        value: 0
+    },    
+    increment(state): any { 
+        return { value: state.value + 1 }; 
+    },
+    decrement(state): any { 
+        return { value: state.value - 1 }; 
+    },
+    set(state, value): any { 
+        return { value: value }
     }
-    
-    return state;
 }
+
+export const ModelGenerated = {
+    $model: Immutable.Map(Model.state),
+    get value(): any {
+        return this.$model.get('value');
+    },
+    $updateModel(model) {
+        this.$model = model;
+        this.onChange(this.$model);
+    },
+    onChange: () => {},
+    increment() {
+        this.$updateModel(this.$model.merge(Model.increment(this.$model.toJS())));
+    },
+    decrement() {
+        this.$updateModel(this.$model.merge(Model.decrement(this.$model.toJS())));
+    },
+    set(value) {
+        this.$updateModel(this.$model.merge(Model.set(this.$model.toJS(), value)));
+    }                
+}
+
+ModelGenerated.increment = ModelGenerated.increment.bind(ModelGenerated);
+ModelGenerated.decrement = ModelGenerated.decrement.bind(ModelGenerated);
+ModelGenerated.set = ModelGenerated.set.bind(ModelGenerated);
 
 export class View extends Component<IViewProperties,{}> {
     
-    constructor() {
-        super();
-        this.increment = this.increment.bind(this);
-        this.decrement = this.decrement.bind(this);
-        this.set = this.set.bind(this);
-    }
-    
-    shouldComponentUpdate(nextProps: IViewProperties) {
-        return nextProps.model !== this.props.model;
-    }
-
-    increment() {
-        this.props.dispatch({type: INCREMENT});
-        (this.refs as any).input.focus();
-    };
-    
-    decrement() {
-        this.props.dispatch({type: DECREMENT});
-        (this.refs as any).input.focus();
-    };
-
-    set(e: any) {
-        this.props.dispatch({type: SET, payload: e.target.value});
-    };
-
     render() {  
         const counterStyle = {display: 'inline-block', padding: '2 20'};
+        const model = ModelGenerated;
         return (
             <div style={counterStyle}>
-                <input ref="input" type="text" onChange={this.set} value={this.props.model.get(VALUE_KEY)}/>
+                <input ref="input" type="text" onChange={model.set} value={model.value}/>
                 {/*<span>{props.model.value}</span>*/}                
-                <button onClick={this.increment}>+</button>
-                <button onClick={this.decrement}>-</button>
+                <button onClick={model.increment}>+</button>
+                <button onClick={model.decrement}>-</button>
             </div>
         );        
     }
