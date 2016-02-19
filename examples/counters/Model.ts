@@ -1,43 +1,73 @@
 import * as Immutable from 'immutable';
 
-const generateProperties = (obj: any, state, immutableState) => {
+const generateProperties = (obj: any, state) => {
+    if (!state) {
+        return obj;
+    }
+    
+    const defineProperty = (obj, key) => {
+        Object.defineProperty(obj, key, {
+                get: function() { return obj.$state.get(key); }
+        });
+    };
+    
+    const defineModel = (obj, key, nestedModel) => {
+        Object.defineProperty(obj, key, {
+            get: function() { return nestedModel; }
+        });
+                
+        // hookup notifications
+        nestedModel.onChange = (function() {
+            this.$updateModel(this.$state.set(key, nestedModel.$state));
+        }).bind(obj);    
+    };
+    
     Object.getOwnPropertyNames(state)
-    .forEach(i => {
-        Object.defineProperty(obj, i, {
-            get: function() { return immutableState.get(i); }
-        });        
-    });    
+        .forEach(key => {
+            const stateSlice = state[key];
+            if (stateSlice.$isModel) {
+                defineModel(obj, key, stateSlice);
+            } else {
+                defineProperty(obj, key);
+            }
+        });    
     return obj;
 };
 
 const generateMethods = (obj: any, stateObj: any) => {
+    if (!stateObj) {
+        return obj;
+    }
+    
     Object.getOwnPropertyNames(stateObj)
-    .filter(i => typeof stateObj[i] === 'function')
-    .forEach(i => {
-        const method = stateObj[i];
-        obj[i] = (function(...args) {
-            const oldState = this.$model.toJS();
-            const newState = this.$model.merge(method(oldState));
-            this.$updateModel(newState);
-        }).bind(obj);
-    });    
+        .filter(i => typeof stateObj[i] === 'function')
+        .forEach(i => {
+            const method = stateObj[i];
+            obj[i] = (function(...args) {
+                const oldState = this.$state.toJS();
+                const newState = this.$state.merge(method(oldState));
+                this.$updateModel(newState);
+            }).bind(obj);
+        });    
     return obj;
 }
 
-export const ModelProxy = (initialState): any => {
-    const state = initialState.state;
+export const Model = (template): any => {
+    const state = template.state;
     const immutableState = Immutable.Map(state); 
 
     const result = {
-        $model: immutableState,
+        $template: template,
+        $isModel: true,
+        $state: immutableState,
         $updateModel(newModel) {
-            this.$model = newModel;
-            this.notifySubcribers(this.$model);
+            this.$state = newModel;
+            this.notifySubcribers(this.$state);
         },
         onChange: () => {},
-        notifySubcribers(model) {
+        notifySubcribers(model = this.$state) {
             this.onChange(model);
         }
     };
-    return generateMethods(generateProperties(result, state, immutableState), initialState);
+    return generateMethods(generateProperties(result, state), template);
 }
