@@ -9,7 +9,7 @@ import { actionWorkflowMiddleware } from './../../src/middleware/actionWorkflowM
 import { actionLogMiddleware } from './../../src/middleware/actionLogMiddleware';
 import { startApp } from './../../src/startApp';
 import { htmlDriver } from './../../src/drivers/htmlDriver';
-import { View, createModel } from './CounterPair'; 
+import { View, createModel } from './CounterList'; 
 
 const updateHandler = (dispatch, actionInfo, getState) => {
     console.log('SET called', actionInfo);
@@ -36,11 +36,11 @@ const appElement = document.getElementById('app');
 const model = createModel();
 
 const render = () => {
-    console.log(model.$state.toJS());
+    console.log('rendering... ', model.$state.toJS());
     ReactDOM.render(React.createElement(View, {model}), appElement)
 };
 
-model.onChange = () => {
+model.$onChange = () => {
     render();
 }
 

@@ -9,11 +9,12 @@ export const createModel = () => Model({
     state: {
         value: 0
     },  
-      
-    increment: (state) => ({ value: state.value + 1 }), 
-    decrement: (state) => ({ value: state.value - 1 }), 
-    set: (state, value) => ({ value: value }),
-    reset: (state) => ({ value: 0 })
+    actions: {
+        increment: (state) => ({ value: state.value + 1 }), 
+        decrement: (state) => ({ value: state.value - 1 }), 
+        set: (state, value) => ({ value: value }),
+        reset: (state) => ({ value: 0 })
+    }
 });
 
 export class View extends Component<any,{}> {

@@ -15,12 +15,14 @@
     "flyd": "^0.2.1",
     "font-awesome": "^4.5.0",
     "immutable": "^3.7.6",
+    "lodash": "^4.5.0",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
     "redux": "^3.3.1",
     "url-loader": "^0.5.7"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
     "css-loader": "^0.23.1",
     "del": "^2.2.0",
     "extract-text-webpack-plugin": "^1.0.1",
@@ -30,6 +32,7 @@
     "gulp-typescript": "^2.11.0",
     "less": "^2.6.0",
     "less-loader": "^2.2.2",
+    "mocha": "^2.4.5",
     "style-loader": "^0.13.0",
     "tape": "^4.4.0",
     "ts-loader": "^0.8.1",

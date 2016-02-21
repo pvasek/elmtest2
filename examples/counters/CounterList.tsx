@@ -1,80 +1,52 @@
-// import * as React from 'react';
-// import { Component } from 'react';
-// import * as Immutable from 'immutable';
-// 
-// import { View as Counter, update as updateCounter, init as initCounter, effects as effectsCounter } from './CounterPair'; 
-// 
-// import { IAction, IViewProperties } from './../../src/types';
-// import { forwardAction } from './../../src/forwardAction';
-// 
-// const COUNTER = 'COUNTER';
-// const ADD_COUNTER = 'ADD_COUNTER';
-// 
-// export const init = () => {
-//     const result = [];
-//     for (var i = 0; i < 50; i++) {
-//         result[i] = initCounter();
-//     }
-//     return Immutable.Map({
-//         [COUNTER]: Immutable.List(result)
-//     });
-// };
-// 
-// export const update = (state: Immutable.Map<any, any> = init(), action: IAction) => {
-//     if (action.type === ADD_COUNTER) {
-//         return state.set(COUNTER, state.get(COUNTER).push(initCounter()));
-//     } 
-//     if (action.type === COUNTER) {
-//         const index = action.forwardedAction.type as number;
-//         const counters = state.get(COUNTER);
-//         const counter = counters.get(index);
-//         return state.set(COUNTER, counters.set(index, updateCounter(counter, action.forwardedAction.forwardedAction))); 
-//     }
-//     return state;
-// }
-// 
-// export class View extends Component<IViewProperties,{}> {
-//     
-//     constructor() {
-//         super();
-//         this.addCounter = this.addCounter.bind(this);
-//     }
-//     
-//     shouldComponentUpdate(nextProps: IViewProperties) {
-//         return nextProps.model !== this.props.model;
-//     }
-// 
-//     addCounter() {
-//         this.props.dispatch({type: ADD_COUNTER});
-//     }
-//         
-//     render() {                
-//         const items = this.props.model.get(COUNTER).map((item, index) => 
-//             (<Counter key={index} 
-//                 model={item} 
-//                 dispatch={forwardAction(this.props.dispatch, COUNTER, index)}
-//             />)
-//             );
-//             
-//         return (
-//             <div>
-//                 <h2>List</h2>
-//                 <div>
-//                     {items}                    
-//                 </div>
-//                 <div>
-//                     <button onClick={this.addCounter}>Add counter</button>
-//                 </div>
-//             </div>
-//         );
-//     }
-// }
-// 
-// export const effects = {
-//     html: View,
-//     http: (state, dispatch) => state.get(COUNTER).count() === 51 ? [
-//         {
-//             url: 'url'
-//         }
-//     ] : []
-// }
+import * as React from 'react';
+import { Component } from 'react';
+import * as Immutable from 'immutable';
+import * as _ from 'lodash';
+import { Model, $updateState } from './Model';
+import { View as Counter, createModel as counterCreateModel } from './Counter'; 
+
+
+export const createModel = () => Model({
+    state: {
+        counterCount: 0
+    },
+    actions: {
+        addCounter(state) {
+            const newState = _.merge({}, state, {
+                counterCount: state.counterCount + 1, 
+                [`counter${state.counterCount}`]: counterCreateModel() 
+            });
+            return $updateState(newState);
+        }    
+    }
+});
+
+const range = (to) => {
+    const result = [];
+    for (let i = 0; i < to; i++) {
+        result.push(i);
+    }
+    return result;
+}
+export class View extends Component<any,{}> {               
+    render() {      
+        const model = this.props.model;
+        
+        const items = range(model.counterCount).map(index => {
+            const item = model[`counter${index}`];
+            return (<Counter key={index} model={item}/>);
+        });
+            
+        return (
+            <div>
+                <h2>List</h2>
+                <div>
+                    {items}                    
+                </div>
+                <div>
+                    <button onClick={model.addCounter}>Add counter</button>
+                </div>
+            </div>
+        );
+    }
+}

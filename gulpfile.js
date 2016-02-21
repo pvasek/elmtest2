@@ -27,5 +27,5 @@ gulp.task('test:watch', ['test'], function() {
 
 
 gulp.task('test', ['ts'], shell.task([
-  'tape ./dist/ts/**/**/__tests__/*.js | faucet',
+  'mocha ./dist/ts/**/**/__tests__/*.js',
 ]));
